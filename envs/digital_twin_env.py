@@ -7,6 +7,7 @@ from gym import spaces
 DATA_DIR = 'data_collection/data/'
 DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1',
                    'digitaltwin_data_300waypoints_1ep_1_wind4']
+TEST_DATA_FILE_NAMES = ['digitaltwin_data_5waypoints_1ep_wind4_testdata']
 
 FEATURES = ['position_x','position_y','position_z',
             'orientation_x', 'orientation_y', 'orientation_z',
@@ -23,7 +24,8 @@ STEPS_PER_EPISODE = 100
 class DigitalTwinEnv(gym.Env):
     '''Open AI Gym Envinrmnet for Ship Digital Twin Offline Learning'''
     
-    def __init__(self) -> None:
+    def __init__(self,
+                 mode:str='train') -> None:
         '''Constructor for DigitalTwinEnv Class'''
         
         # Build Action Space
@@ -39,6 +41,8 @@ class DigitalTwinEnv(gym.Env):
         # Indicate where in the data you current are located
         self._simulation_step_pointer = 0
                 
+        self._mode = mode
+        self._indices_perturbed_in_last_step = []
         self.reset()
                 
     def build_action_space(self):
@@ -122,7 +126,10 @@ class DigitalTwinEnv(gym.Env):
             if included:
                 obs.append(feature)
 
-        self._processed_obs = self.process_observation(obs)         
+        self._processed_obs = obs
+        if not self._mode == 'test': 
+            self._processed_obs = self.process_observation(obs) 
+                    
         return np.array(self._processed_obs)
 
     def process_observation(self, obs):
@@ -178,13 +185,17 @@ class DigitalTwinEnv(gym.Env):
         
         return self._get_observation()
 
-    def read_data(self):
+    def read_data(self, mode='train'):
         '''Read in all data as one pandas dataframe'''
         
+        data_files = DATA_FILE_NAMES
+        if mode == 'test':
+            data_files = TEST_DATA_FILE_NAMES
+            
         dataframe_lst = []
         first_csv = True
         # Read in each csv file
-        for file_name in DATA_FILE_NAMES:
+        for file_name in data_files:
             # Only load header for the first dataframe
             if first_csv:
                 df = pd.read_csv(DATA_DIR + file_name+'.csv', index_col=None)
@@ -237,6 +248,14 @@ class DigitalTwinEnv(gym.Env):
 
     def close(self):
         pass
+    
+    def display_obs(self, obs):
+        #Assume observation in feature is in order!
+        count = 0
+        for observation in zip(obs):
+            print('['+str(count)+'] \t' + FEATURES[count] + ': ' + str(round(observation[0],2)))
+            count+=1
+                    
 
     @property
     def num_rows(self):
@@ -245,7 +264,8 @@ class DigitalTwinEnv(gym.Env):
     @property
     def num_cols(self):
         return self._num_cols
-        
+    
+
 
 
 

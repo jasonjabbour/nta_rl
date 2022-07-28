@@ -20,7 +20,7 @@ class DigitalTwin():
         self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'policy_'+str(POLICY_NUMBER))
         
         #Initialize Open AI Gym environment
-        self._env = DigitalTwinEnv()
+        self._env = DigitalTwinEnv(mode=mode)
         
         # Timesteps based on number of data observations
         self._total_timesteps =  self._env.num_rows - 4961 # 160,000 timesteps
@@ -40,9 +40,31 @@ class DigitalTwin():
         print('>> Model Saved <<')
     
     def test(self):
-        model = PPO.load(model, env=self._env)
+        model = PPO.load(self._model_path, env=self._env)
         
-        action = model.predict(obs, deterministic=True)
+        obs = self._env.reset()
+
+        for _ in range(100):
+            
+            print('Observation:')
+            self._env.display_obs(obs)
+
+            index_to_modify = input('Index to modify: ')
+            if index_to_modify.isnumeric():
+                index_to_modify = int(index_to_modify)
+                perturbation_amount = input('Perturbation: ')
+                obs[index_to_modify] = perturbation_amount
+            
+            action, _ = model.predict(obs, deterministic=True)
+            
+            print('Action:')
+            self._env.display_obs(action)
+
+            self._env.step(action)
+            
+            another_observation = input('Next? [Y/n]')
+            if not another_observation.lower() == 'y':
+                break
 
 if __name__ == '__main__':
     # Input commands
