@@ -7,7 +7,8 @@ from gym import spaces
 DATA_DIR = 'data_collection/data/'
 DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1',
                    'digitaltwin_data_300waypoints_1ep_1_wind4']
-TEST_DATA_FILE_NAMES = ['digitaltwin_data_5waypoints_1ep_wind4_testdata']
+# TEST_DATA_FILE_NAMES = ['digitaltwin_data_5waypoints_1ep_wind4_testdata']
+TEST_DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1']
 
 FEATURES = ['position_x','position_y','position_z',
             'orientation_x', 'orientation_y', 'orientation_z',
@@ -233,6 +234,8 @@ class DigitalTwinEnv(gym.Env):
         # subtract 1 to account for header 
         self._num_rows = self._df.shape[0] - 1
         self._num_cols = self._df.shape[1] - 1
+        
+        #print(self._df.head())
                 
         # print(self._df.iloc[98078])
         # print(self._df['position_x'].max())

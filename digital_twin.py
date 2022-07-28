@@ -60,9 +60,9 @@ class DigitalTwin():
             print('Action:')
             self._env.display_obs(action)
 
-            self._env.step(action)
+            obs, _, _, _ = self._env.step(action)
             
-            another_observation = input('Next? [Y/n]')
+            another_observation = input('Next? [Y/n] ')
             if not another_observation.lower() == 'y':
                 break
 
