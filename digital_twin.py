@@ -2,49 +2,76 @@ import os
 import argparse
 import gym
 from stable_baselines3 import DDPG, PPO
+from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.vec_env.dummy_vec_env import DummyVecEnv
 from envs.digital_twin_env import DigitalTwinEnv
 
-POLICY_NUMBER = 2
+
+POLICY_NUMBER = 3
 SEED = 7
-ALGORITHM_NAME = 'DDPG'
-DISCOUNT_FACTOR = .1
+ALGORITHM_NAME = 'PPO'
+EVAL_FREQ = 10000
+# DISCOUNT_FACTOR = .1
 
 class DigitalTwin():
     '''Driver Class for Offline RL Training a DigitalTwin Ship'''
     
     def __init__(self, 
-                 mode:str='train') -> None:
+                 mode:str='train', 
+                 best_model=False) -> None:
         '''Constructor for DigitalTwin Class'''
         
         # Tensorboard logging path
         self._log_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'Logs')
         # Model Path
         self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), ALGORITHM_NAME + '_policy_'+str(POLICY_NUMBER))
+        # Load Best Model
+        if best_model:
+            self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'best_model')
+        # Model Directory
+        self._model_directory = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER))
         
-        #Initialize Open AI Gym environment
+        #Initialize Open AI Gym environment. A
         self._env = DigitalTwinEnv(mode=mode)
         
         # Timesteps based on number of data observations
-        self._total_timesteps =  self._env.num_rows - 5000 # Training usually doesn't stop exactly at timesteps specified
-        self._total_timesteps = 1000
+        self._total_timesteps = self._env.get_num_rows() - 5000 # Training usually doesn't stop exactly at timesteps specified
+
         if mode == 'train':
             self.train()
         
         if mode == 'test':
             self.test()
 
-
     def train(self):
         '''Train Reinforcement Learning Policy'''
         
+        # Add Wrappers for efficiency and callback function
+        self._env = Monitor(self._env, self._model_directory)
+        self._env = DummyVecEnv([lambda: self._env])
+        
+        #Initialize Model
         model = self.algorithm_class('MlpPolicy',
                                       self._env,
                                       verbose=1,
                                       tensorboard_log=self._log_path,
-                                      seed=SEED, 
-                                      gamma=DISCOUNT_FACTOR)
-        model.learn(total_timesteps=self._total_timesteps)
+                                      seed=SEED)
+        
+        # Create callback to evaluate performance of model and save the best model
+        eval_callback = EvalCallback(self._env, 
+                                     best_model_save_path=self._model_directory,
+                                     log_path=self._model_directory, 
+                                     eval_freq=EVAL_FREQ, 
+                                     deterministic=True)
+        
+        # Start Training Model
+        model.learn(total_timesteps=self._total_timesteps,
+                    callback=eval_callback)
+        
+        # Save Trained Model
         model.save(self._model_path)
+        
         print('>> Model Saved <<')
     
     def test(self):
@@ -90,7 +117,9 @@ if __name__ == '__main__':
     # Input commands
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--mode', dest='mode', type=str, default='train')
+    arg_parser.add_argument('--best_model', dest='best_model', action='store_true', default=False)
     args = arg_parser.parse_args()
     
         
-    run = DigitalTwin(mode=args.mode)
+    run = DigitalTwin(mode=args.mode, 
+                      best_model=args.best_model)

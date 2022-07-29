@@ -290,18 +290,19 @@ class DigitalTwinEnv(gym.Env):
     
     def display(self, features):
         #Assume observation in feature is in order!
+        features_num = self.get_num_observation_features()
         count = 0
         for feature in zip(features):
+            if count >= features_num:
+                break
             print('['+str(count)+'] \t' + FEATURES[count] + ': ' + str(round(feature[0],2)))
             count+=1
                     
 
-    @property
-    def num_rows(self):
+    def get_num_rows(self):
         return self._num_rows
     
-    @property
-    def num_cols(self):
+    def get_num_cols(self):
         return self._num_cols
     
 
