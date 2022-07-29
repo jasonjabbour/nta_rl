@@ -1,0 +1,677 @@
+PPO Algorithm no history 165,000 timesteps
+
+[5 rows x 19 columns]
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: ^CTraceback (most recent call last):
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 76, in <module>
+    run = DigitalTwin(mode=args.mode)
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 33, in __init__
+    self.test()
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 52, in test
+    index_to_modify = input('Index to modify: ')
+KeyboardInterrupt
+
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n] y
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 0
+Perturbation: 100000
+Action:
+[0] 	position_x: 0.0
+[1] 	position_y: 0.42
+[2] 	position_z: 0.0
+[3] 	orientation_x: 0.24
+[4] 	orientation_y: 0.09
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 0.0
+[7] 	position_rate_y: 0.0
+[8] 	position_rate_z: 0.48
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.33
+[11] 	orientation_rate_z: 0.36
+[12] 	wind_speed: 0.06
+[13] 	engine_velocity_command: 0.0
+[14] 	rudder_angle: 0.0
+Next? [Y/n] n
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n] n
+
+
+
+
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n] y
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 0
+Perturbation: 1000000
+Action:
+[0] 	position_x: 0.0
+[1] 	position_y: 0.42
+[2] 	position_z: 0.0
+[3] 	orientation_x: 0.24
+[4] 	orientation_y: 0.09
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 0.0
+[7] 	position_rate_y: 0.0
+[8] 	position_rate_z: 0.48
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.33
+[11] 	orientation_rate_z: 0.36
+[12] 	wind_speed: 0.06
+[13] 	engine_velocity_command: 0.0
+[14] 	rudder_angle: 0.0
+Next? [Y/n] y
+Observation:
+[0] 	position_x: 219.99
+[1] 	position_y: 40.02
+[2] 	position_z: 0.85
+[3] 	orientation_x: 0.01
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.7
+[6] 	position_rate_x: 0.45
+[7] 	position_rate_y: 0.1
+[8] 	position_rate_z: -1.52
+[9] 	orientation_rate_x: 0.09
+[10] 	orientation_rate_y: -0.16
+[11] 	orientation_rate_z: -0.1
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 13
+Perturbation: -1121212
+Action:
+[0] 	position_x: 0.0
+[1] 	position_y: 0.01
+[2] 	position_z: 0.0
+[3] 	orientation_x: 0.18
+[4] 	orientation_y: 0.0
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 0.0
+[7] 	position_rate_y: 0.0
+[8] 	position_rate_z: 0.0
+[9] 	orientation_rate_x: 0.05
+[10] 	orientation_rate_y: 0.0
+[11] 	orientation_rate_z: 0.0
+[12] 	wind_speed: 0.0
+[13] 	engine_velocity_command: 0.32
+[14] 	rudder_angle: 0.0
+Next? [Y/n] n
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n] y
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 0    
+Perturbation: 10000
+Action:
+[0] 	position_x: 0.0
+[1] 	position_y: 0.42
+[2] 	position_z: 0.0
+[3] 	orientation_x: 0.24
+[4] 	orientation_y: 0.09
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 0.0
+[7] 	position_rate_y: 0.0
+[8] 	position_rate_z: 0.48
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.33
+[11] 	orientation_rate_z: 0.36
+[12] 	wind_speed: 0.06
+[13] 	engine_velocity_command: 0.0
+[14] 	rudder_angle: 0.0
+Next? [Y/n] n
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n] n
+
+
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n]y
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 0
+Perturbation: 1000
+Action:
+[0] 	position_x: 0.0
+[1] 	position_y: 0.35
+[2] 	position_z: 0.0
+[3] 	orientation_x: 0.5
+[4] 	orientation_y: 0.0
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 0.03
+[7] 	position_rate_y: 0.0
+[8] 	position_rate_z: 0.36
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.42
+[11] 	orientation_rate_z: 0.28
+[12] 	wind_speed: 0.0
+[13] 	engine_velocity_command: 0.02
+[14] 	rudder_angle: 0.0
+Next? [Y/n]y
+Observation:
+[0] 	position_x: 219.99
+[1] 	position_y: 40.02
+[2] 	position_z: 0.85
+[3] 	orientation_x: 0.01
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.7
+[6] 	position_rate_x: 0.45
+[7] 	position_rate_y: 0.1
+[8] 	position_rate_z: -1.52
+[9] 	orientation_rate_x: 0.09
+[10] 	orientation_rate_y: -0.16
+[11] 	orientation_rate_z: -0.1
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 0
+Perturbation: 1
+Action:
+[0] 	position_x: 0.34
+[1] 	position_y: 0.4
+[2] 	position_z: 0.17
+[3] 	orientation_x: 0.3
+[4] 	orientation_y: 0.0
+[5] 	orientation_z: 0.45
+[6] 	position_rate_x: 0.49
+[7] 	position_rate_y: 0.08
+[8] 	position_rate_z: 0.72
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.52
+[11] 	orientation_rate_z: 0.14
+[12] 	wind_speed: 0.37
+[13] 	engine_velocity_command: 0.0
+[14] 	rudder_angle: 0.6
+Next? [Y/n]y
+Observation:
+[0] 	position_x: 219.98
+[1] 	position_y: 40.07
+[2] 	position_z: 0.74
+[3] 	orientation_x: 0.02
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.7
+[6] 	position_rate_x: 0.86
+[7] 	position_rate_y: 0.16
+[8] 	position_rate_z: -1.57
+[9] 	orientation_rate_x: 0.15
+[10] 	orientation_rate_y: -0.24
+[11] 	orientation_rate_z: -0.17
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 100000
+Perturbation: n
+Traceback (most recent call last):
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 76, in <module>
+    run = DigitalTwin(mode=args.mode)
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 33, in __init__
+    self.test()
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 56, in test
+    obs[index_to_modify] = perturbation_amount
+IndexError: index 100000 is out of bounds for axis 0 with size 17
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.81
+[1] 	position_y: 0.58
+[2] 	position_z: 0.15
+[3] 	orientation_x: 0.81
+[4] 	orientation_y: 0.54
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.47
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.6
+[11] 	orientation_rate_z: 0.3
+[12] 	wind_speed: 0.53
+[13] 	engine_velocity_command: 0.56
+[14] 	rudder_angle: 0.08
+Next? [Y/n]n
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 220.0
+[1] 	position_y: 40.0
+[2] 	position_z: 1.01
+[3] 	orientation_x: 0.0
+[4] 	orientation_y: -0.0
+[5] 	orientation_z: 0.71
+[6] 	position_rate_x: -0.01
+[7] 	position_rate_y: 0.02
+[8] 	position_rate_z: -1.3
+[9] 	orientation_rate_x: 0.02
+[10] 	orientation_rate_y: -0.05
+[11] 	orientation_rate_z: -0.02
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: 1.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: ^CTraceback (most recent call last):
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 76, in <module>
+    run = DigitalTwin(mode=args.mode)
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 33, in __init__
+    self.test()
+  File "/home/jason/Desktop/Jason/nta_rl/digital_twin.py", line 52, in test
+    index_to_modify = input('Index to modify: ')
+KeyboardInterrupt
+
+(nta-rl-env) jason@ubuntu:~/Desktop/Jason/nta_rl$ python digital_twin.py --mode test
+/home/jason/anaconda3/envs/nta-rl-env/lib/python3.9/site-packages/gym/spaces/box.py:73: UserWarning: WARN: Box bound precision lowered by casting to float32
+  logger.warn(
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+Observation:
+[0] 	position_x: 227.58
+[1] 	position_y: 42.05
+[2] 	position_z: 1.1
+[3] 	orientation_x: -0.0
+[4] 	orientation_y: -0.04
+[5] 	orientation_z: -0.09
+[6] 	position_rate_x: 0.99
+[7] 	position_rate_y: -0.02
+[8] 	position_rate_z: 0.17
+[9] 	orientation_rate_x: -0.01
+[10] 	orientation_rate_y: 0.04
+[11] 	orientation_rate_z: 0.0
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: -0.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: 0
+Perturbation: 1
+Action:
+[0] 	position_x: 0.34
+[1] 	position_y: 0.4
+[2] 	position_z: 0.17
+[3] 	orientation_x: 0.3
+[4] 	orientation_y: 0.0
+[5] 	orientation_z: 0.45
+[6] 	position_rate_x: 0.48
+[7] 	position_rate_y: 0.08
+[8] 	position_rate_z: 0.72
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.52
+[11] 	orientation_rate_z: 0.14
+[12] 	wind_speed: 0.37
+[13] 	engine_velocity_command: 0.0
+[14] 	rudder_angle: 0.6
+Next? [Y/n]y
+Observation:
+[0] 	position_x: 227.58
+[1] 	position_y: 42.05
+[2] 	position_z: 1.1
+[3] 	orientation_x: -0.0
+[4] 	orientation_y: -0.04
+[5] 	orientation_z: -0.09
+[6] 	position_rate_x: 0.99
+[7] 	position_rate_y: -0.02
+[8] 	position_rate_z: 0.17
+[9] 	orientation_rate_x: -0.01
+[10] 	orientation_rate_y: 0.04
+[11] 	orientation_rate_z: 0.0
+[12] 	wind_speed: 3.0
+[13] 	engine_velocity_command: 200.0
+[14] 	rudder_angle: -0.05
+[15] 	waypoint_x: 313.0
+[16] 	waypoint_y: 28.0
+Index to modify: no
+Action:
+[0] 	position_x: 0.83
+[1] 	position_y: 0.63
+[2] 	position_z: 0.18
+[3] 	orientation_x: 0.82
+[4] 	orientation_y: 0.62
+[5] 	orientation_z: 0.0
+[6] 	position_rate_x: 1.0
+[7] 	position_rate_y: 0.07
+[8] 	position_rate_z: 0.55
+[9] 	orientation_rate_x: 0.0
+[10] 	orientation_rate_y: 0.54
+[11] 	orientation_rate_z: 0.39
+[12] 	wind_speed: 0.55
+[13] 	engine_velocity_command: 0.61
+[14] 	rudder_angle: 0.11
+
+
+

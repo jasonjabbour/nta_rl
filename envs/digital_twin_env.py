@@ -6,7 +6,8 @@ from gym import spaces
 
 DATA_DIR = 'data_collection/data/'
 DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1',
-                   'digitaltwin_data_300waypoints_1ep_1_wind4']
+                   'digitaltwin_data_300waypoints_1ep_1_wind4', 
+                   'digitaltwin_data_620waypoints_1ep_wind5_maxcoord150']
 # TEST_DATA_FILE_NAMES = ['digitaltwin_data_5waypoints_1ep_wind4_testdata']
 TEST_DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1']
 
@@ -18,7 +19,7 @@ FEATURES = ['position_x','position_y','position_z',
             'waypoint_x', 'waypoint_y', 'reached_waypoint','waypoint_counter']
 
 INCLUDE_FEATURE_AS_ACTION = (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0)
-INCLUDE_FEATURE_AS_OBSERVATION = (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0)
+INCLUDE_FEATURE_AS_OBSERVATION = (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0) #17 features in observation space
 
 STEPS_PER_EPISODE = 100
 
@@ -28,6 +29,12 @@ class DigitalTwinEnv(gym.Env):
     def __init__(self,
                  mode:str='train') -> None:
         '''Constructor for DigitalTwinEnv Class'''
+                
+        # Set number of history observations to store
+        self._history_buffer_size = 5
+        
+        # Indicate where in the data you current are located
+        self._simulation_step_pointer = 0 + self._history_buffer_size
         
         # Build Action Space
         self.build_action_space()
@@ -38,9 +45,6 @@ class DigitalTwinEnv(gym.Env):
         # Read in dataset
         self.read_data()
         self.data_summary()
-        
-        # Indicate where in the data you current are located
-        self._simulation_step_pointer = 0
                 
         self._mode = mode
         self._indices_perturbed_in_last_step = []
@@ -68,9 +72,12 @@ class DigitalTwinEnv(gym.Env):
         # Get number of features
         self._included_features_in_obs_num = self.get_num_observation_features()
         
-        # Set lower and upper bound to [0,1] for all included features
-        obs_upper_bound = [np.inf]*self._included_features_in_obs_num
-        obs_lower_bound = [-np.inf]*self._included_features_in_obs_num
+        # m features * (n history + 1 current observation)
+        observation_length = self._included_features_in_obs_num*(self._history_buffer_size+1)
+        
+        # Set lower and upper bound to [0,1] for all included features and history buffer
+        obs_upper_bound = [np.inf]*observation_length
+        obs_lower_bound = [-np.inf]*observation_length
         
         # Create Box Observational Space
         self.observation_space = spaces.Box(low=np.array(obs_lower_bound),
@@ -120,7 +127,7 @@ class DigitalTwinEnv(gym.Env):
         
         # Get new row of data
         row = self._df.iloc[self._simulation_step_pointer].values
-        
+                
         # Select observations
         obs = []
         for feature, included in zip(row, INCLUDE_FEATURE_AS_OBSERVATION):
@@ -130,8 +137,29 @@ class DigitalTwinEnv(gym.Env):
         self._processed_obs = obs
         if not self._mode == 'test': 
             self._processed_obs = self.process_observation(obs) 
-                    
-        return np.array(self._processed_obs)
+            
+        # Add the real previous observations history to this processed observation
+        self._proccessed_obs_with_history = self.add_history(self._processed_obs)
+                
+        return np.array(self._proccessed_obs_with_history )
+
+    def add_history(self, obs):
+        '''Select previous rows from dataframe and add to current observation'''
+        
+        # Get names of columns to include in observation
+        included_columns_as_features = self.get_observation_feature_names()
+        
+        # Make a Dataframe with only these columns
+        included_cols_df = self._df[included_columns_as_features]
+        
+        # Get all n history excluding current row. Current row is the obs passed in that could have been perturbed
+        real_history_observations = np.array(included_cols_df.iloc[self._simulation_step_pointer-self._history_buffer_size:self._simulation_step_pointer].values)
+        # Flatten rows into 1D list
+        real_history_observations = real_history_observations.flatten()
+        
+        # Return a list of the observation along with history
+        return np.concatenate((obs, real_history_observations))
+        
 
     def process_observation(self, obs):
         '''Randomly choose which observation and how many observation to randomly perturb'''
@@ -227,8 +255,16 @@ class DigitalTwinEnv(gym.Env):
                 included_observation_num+=1
         
         return included_observation_num
-
-
+    
+    def get_observation_feature_names(self):
+        '''Return the column names of the features that will be passed in as an observation'''
+        included_feature_names = []
+        for i, included in enumerate(INCLUDE_FEATURE_AS_OBSERVATION):
+            if included == 1:
+                included_feature_names.append(FEATURES[i])
+        
+        return included_feature_names
+                
     def data_summary(self):
         
         # subtract 1 to account for header 
@@ -252,11 +288,11 @@ class DigitalTwinEnv(gym.Env):
     def close(self):
         pass
     
-    def display_obs(self, obs):
+    def display(self, features):
         #Assume observation in feature is in order!
         count = 0
-        for observation in zip(obs):
-            print('['+str(count)+'] \t' + FEATURES[count] + ': ' + str(round(observation[0],2)))
+        for feature in zip(features):
+            print('['+str(count)+'] \t' + FEATURES[count] + ': ' + str(round(feature[0],2)))
             count+=1
                     
 
