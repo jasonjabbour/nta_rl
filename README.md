@@ -57,7 +57,7 @@ Verify that the [nta_rl_data_collection](https://github.com/jasonjabbour/nta_rl_
 
 nta_rl_data_collection
 
-        cd cd ~/catkin_ws/src/usv_sim_lsa/usv_navigation/nta_rl_data_collection
+        cd ~/catkin_ws/src/usv_sim_lsa/usv_navigation/nta_rl_data_collection
 
 Verify that the other modified files with the simulator can be found in these directories.
 
@@ -107,7 +107,7 @@ The ```digital_twin_data_collection.py``` script collects data of a ship navigat
 #### Ship Navigating to 300 Waypoints
 ![](captures/300waypoints.PNG)
 
-#### Increasing Windspeed
+#### Increasing Wind Speed
 ![](captures/wind%205.PNG)
 
 
