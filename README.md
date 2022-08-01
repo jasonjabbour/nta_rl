@@ -169,7 +169,8 @@ Create a Conda Environment
 Install Dependencies
 
         pip install gym
-        pip isntall stable-baselines3[extra]
+        pip install stable-baselines3[extra]
+        pip install tensorboard
 
 ### Train an RL Policy
 
