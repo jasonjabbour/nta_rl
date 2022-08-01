@@ -6,7 +6,7 @@ The purpose of ```nta_rl``` is to learn the behavior of a ship using its network
 There are two main components of this repository. The ```data collection``` component and the ```machine learning``` component. 
 
 ## Data Collection
-To simulate a ship, the [usv_sim_lsa](https://github.com/disaster-robotics-proalertas/usv_sim_lsa) repository was slightly modified. The purpose behind modifying the simulator is to collect network traffic data by subscribing to various topics, generate and specify waypoints for the ship to navigate to using a PID controller, and make visual improvements. Each file within this simulator that was updated is stored within the ```data_collection/simulator_changed_scripts/``` directory. Additionally, a new submodule called ```nta_rl_data_collection``` was added to the simulator. All these changes to the simulator are stored within this forked repository. 
+To simulate a ship, the [usv_sim_lsa](https://github.com/disaster-robotics-proalertas/usv_sim_lsa) repository was slightly modified. The purpose behind modifying the simulator is to collect network traffic data by subscribing to various topics, generate and specify waypoints for the ship to navigate to using a PID controller, and make visual improvements. Each file within this simulator that was updated is stored within the ```data_collection/simulator_changed_scripts/``` directory. Additionally, a new submodule called ```nta_rl_data_collection``` was added to the simulator. All these changes to the simulator are stored within [this](https://github.com/jasonjabbour/usv_sim_lsa.git) forked repository. 
 
 To install this modified simulator, follow the instructions below:
 
@@ -81,7 +81,7 @@ rudderboat_scenario_j1.xml
 
         cd ~/catkin_ws/src/usv_sim_lsa/usv_sim/scenes
 
-#### Run the instalation script:
+#### Run the Installation script:
 
         cd ~/catkin_ws/src/usv_sim_lsa
         chmod +x ./install_usv_sim 
@@ -99,7 +99,17 @@ rudderboat_scenario_j1.xml
 
 ### Collect Data:
 
-The ```digital_twin_data_collection.py``` script collects data of a ship navigating to various waypoints.
+The ```digital_twin_data_collection.py``` script collects data of a ship navigating to various waypoints. Waypoints are generated at random within specified boundaries. The ship will continuously navigate to each waypoint using a PID controller. Data will be collected while the ship navigates to its instructed waypoints by subscribing to various ROS topics. The rudderboat_scenario_j1.xml holds environmental parameters such as wind speed and should be modified as needed. 
+
+#### Ship Navigating to a Waypoint
+![](captures/rudderboat-onwater.PNG)
+
+#### Ship Navigating to 300 Waypoints
+![](captures/300waypoints.PNG)
+
+#### Increasing Windspeed
+![](captures/wind%205.PNG)
+
 
 #### Terminal 1
 
@@ -136,7 +146,7 @@ Add and Save to end
 
 ## Learning Ship Behavior
 
-Once the data is collected, we can train models using the ```nta_rl``` repository to learn the behavior of a ship's network traffic data. 
+Once the data is collected, we can train models using the ```nta_rl``` repository to learn the behavior of a ship's network traffic data. The RL toolchain consists of stable-baselines3 and OpenAI Gym. The purpose of learning ship behavior is to determine a confidence level for future timesteps. If the network traffic data is maliciously altered, the policy should indicate low confidence for the manipulated data streams. 
 
 ### Clone the nta_rl Repository
 
