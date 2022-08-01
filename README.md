@@ -171,7 +171,8 @@ Install Dependencies
         pip install gym
         pip install stable-baselines3[extra]
         pip install tensorboard
-
+        pip install attrs
+        
 ### Train an RL Policy
 
 Specify the algorithm and policy number at the top of digital_twin.py

@@ -1,34 +1,28 @@
+import os 
+import inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(os.path.dirname(currentdir))
+os.sys.path.insert(0, parentdir)
+
 import pandas as pd
 import numpy as np
 import random
 import gym 
 from gym import spaces
 
-DATA_DIR = 'data_collection/data/'
-DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1',
-                   'digitaltwin_data_300waypoints_1ep_1_wind4', 
-                   'digitaltwin_data_620waypoints_1ep_wind5_maxcoord150']
-# TEST_DATA_FILE_NAMES = ['digitaltwin_data_5waypoints_1ep_wind4_testdata']
-TEST_DATA_FILE_NAMES = ['digitaltwin_data_300waypoints_1ep_1']
-
-FEATURES = ['position_x','position_y','position_z',
-            'orientation_x', 'orientation_y', 'orientation_z',
-            'position_rate_x', 'position_rate_y', 'position_rate_z', 
-            'orientation_rate_x', 'orientation_rate_y', 'orientation_rate_z',
-            'wind_speed', 'engine_velocity_command', 'rudder_angle',
-            'waypoint_x', 'waypoint_y', 'reached_waypoint','waypoint_counter']
-
-INCLUDE_FEATURE_AS_ACTION = (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0)
-INCLUDE_FEATURE_AS_OBSERVATION = (1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0) #17 features in observation space
-
-STEPS_PER_EPISODE = 100
+from envs import digital_twin_config
+from envs.attackers.naive_attacker import NaiveAttacker
 
 class DigitalTwinEnv(gym.Env):
-    '''Open AI Gym Envinrmnet for Ship Digital Twin Offline Learning'''
+    '''Open AI Gym Environment for Ship Digital Twin Offline Learning'''
     
     def __init__(self,
                  mode:str='train') -> None:
         '''Constructor for DigitalTwinEnv Class'''
+        
+        # Load Configuration Parameters
+        self.load_config_parameters()
                 
         # Set number of history observations to store
         self._history_buffer_size = 5
@@ -45,11 +39,25 @@ class DigitalTwinEnv(gym.Env):
         # Read in dataset
         self.read_data()
         self.data_summary()
+        
+        # Initialize the attacker module
+        self._attacker = NaiveAttacker()
                 
         self._mode = mode
         self._indices_perturbed_in_last_step = []
         self.reset()
-                
+    
+    def load_config_parameters(self):
+        '''Load Config Parameters into this class'''
+        env_config = digital_twin_config.EnvironmentConfig()
+        self._data_dir = env_config.data_dir
+        self._data_file_names = env_config.data_file_names
+        self._test_data_file_names = env_config.test_data_file_names
+        self._features = env_config.features
+        self._include_feature_as_action = env_config.include_features_as_action
+        self._include_feature_as_observation = env_config.include_features_as_observation
+        self._steps_per_episode = env_config.steps_per_episode
+        
     def build_action_space(self):
         '''Build Action Space'''
         
@@ -130,13 +138,14 @@ class DigitalTwinEnv(gym.Env):
                 
         # Select observations
         obs = []
-        for feature, included in zip(row, INCLUDE_FEATURE_AS_OBSERVATION):
+        for feature, included in zip(row, self._include_feature_as_observation):
             if included:
                 obs.append(feature)
 
+        # Send observation to attacker module
         self._processed_obs = obs
         if not self._mode == 'test': 
-            self._processed_obs = self.process_observation(obs) 
+            self._processed_obs = self._attacker.on_step(obs)
             
         # Add the real previous observations history to this processed observation
         self._proccessed_obs_with_history = self.add_history(self._processed_obs)
@@ -160,49 +169,10 @@ class DigitalTwinEnv(gym.Env):
         # Return a list of the observation along with history
         return np.concatenate((obs, real_history_observations))
         
-
-    def process_observation(self, obs):
-        '''Randomly choose which observation and how many observation to randomly perturb'''
-        
-        processed_obs = obs.copy()
-        
-        num_observations = len(processed_obs)
-        
-        # Select how many observations to perturb by generating multiple options
-        num_observations_to_perturb_options = [np.random.uniform(0, num_observations) for i in range(num_observations)]
-        
-        # Select the option that is the minumum number of observations to perturb
-        num_observations_to_perturb = int(min(num_observations_to_perturb_options))
-        
-        # Randomly choose which indices to perturb
-        indices_to_perturb_optional = [np.random.randint(0, num_observations-1) for i in range(num_observations_to_perturb)]   
-        
-        perturbation_amount = 0 
-        self._indices_perturbed_in_last_step = []
-        
-        # Go through chosen indices of observational space to perturb
-        for index in indices_to_perturb_optional:
-            # Check if this observation is allowed to be perturbed and not already perturbed
-            if INCLUDE_FEATURE_AS_ACTION[index] and (index not in self._indices_perturbed_in_last_step):
-                
-                # Randomly select min and max
-                max_perturbation_amount = np.random.randint(1, 1000)
-                min_perturbation_amount = -np.random.randint(1, 1000)
-                # Select pertubraiton amount
-                perturbation_amount = np.random.randint(min_perturbation_amount, max_perturbation_amount)
-                # Make sure to choose a number that is not zero
-                while perturbation_amount == 0: 
-                    perturbation_amount = np.random.randint(min_perturbation_amount, max_perturbation_amount)
-                # Randomly select perturbation amount using random max and min
-                processed_obs[index] = processed_obs[index] + perturbation_amount
-                
-                self._indices_perturbed_in_last_step.append(index)          
-            
-        return processed_obs
     
     def _terminate_episode(self):
         '''Determine whether to end epside'''
-        if self._episode_step_num >= STEPS_PER_EPISODE:
+        if self._episode_step_num >= self._steps_per_episode:
             return True
         return False
 
@@ -212,14 +182,17 @@ class DigitalTwinEnv(gym.Env):
         # Step number in episode
         self._episode_step_num = 0  
         
+        # Reset attacker 
+        self._attacker.on_reset()
+        
         return self._get_observation()
 
     def read_data(self, mode='train'):
         '''Read in all data as one pandas dataframe'''
         
-        data_files = DATA_FILE_NAMES
+        data_files = self._data_file_names
         if mode == 'test':
-            data_files = TEST_DATA_FILE_NAMES
+            data_files = self._test_data_file_names
             
         dataframe_lst = []
         first_csv = True
@@ -227,10 +200,10 @@ class DigitalTwinEnv(gym.Env):
         for file_name in data_files:
             # Only load header for the first dataframe
             if first_csv:
-                df = pd.read_csv(DATA_DIR + file_name+'.csv', index_col=None)
+                df = pd.read_csv(self._data_dir + file_name+'.csv', index_col=None)
                 first_csv = False
             else:
-                df = pd.read_csv(DATA_DIR + file_name+'.csv', index_col=None, header=0)
+                df = pd.read_csv(self._data_dir + file_name+'.csv', index_col=None, header=0)
             dataframe_lst.append(df)
         
         # Concatinate all dataframes into one big dataframe
@@ -240,7 +213,7 @@ class DigitalTwinEnv(gym.Env):
         '''Return the number of features that will have a corresponding action'''
         
         included_features_as_action_num = 0
-        for i in INCLUDE_FEATURE_AS_ACTION:
+        for i in self._include_feature_as_action:
             if i == 1:
                 included_features_as_action_num+=1
         
@@ -250,7 +223,7 @@ class DigitalTwinEnv(gym.Env):
         '''Return the number of features that will be passed in as an observation'''
         
         included_observation_num = 0
-        for i in INCLUDE_FEATURE_AS_OBSERVATION:
+        for i in self._include_feature_as_observation:
             if i == 1:
                 included_observation_num+=1
         
@@ -259,9 +232,9 @@ class DigitalTwinEnv(gym.Env):
     def get_observation_feature_names(self):
         '''Return the column names of the features that will be passed in as an observation'''
         included_feature_names = []
-        for i, included in enumerate(INCLUDE_FEATURE_AS_OBSERVATION):
+        for i, included in enumerate(self._include_feature_as_observation):
             if included == 1:
-                included_feature_names.append(FEATURES[i])
+                included_feature_names.append(self._features[i])
         
         return included_feature_names
                 
@@ -295,7 +268,7 @@ class DigitalTwinEnv(gym.Env):
         for feature in zip(features):
             if count >= features_num:
                 break
-            print('['+str(count)+'] \t' + FEATURES[count] + ': ' + str(round(feature[0],2)))
+            print('['+str(count)+'] \t' + self._features[count] + ': ' + str(round(feature[0],2)))
             count+=1
                     
 
