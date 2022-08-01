@@ -1,9 +1,0 @@
-Environment Name:
-conda create --name nta-rl-env python=3.9
-conda activate nta-rl-env
-pip install gym
-pip isntall stable-baselines3[extra]
-
-Requirements:
-gym
-stable-baselines3

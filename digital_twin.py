@@ -48,8 +48,8 @@ class DigitalTwin():
         '''Train Reinforcement Learning Policy'''
         
         # Add Wrappers for efficiency and callback function
-        self._env = Monitor(self._env, self._model_directory)
-        self._env = DummyVecEnv([lambda: self._env])
+        # self._env = Monitor(self._env, self._model_directory)
+        # self._env = DummyVecEnv([lambda: self._env])
         
         #Initialize Model
         model = self.algorithm_class('MlpPolicy',
