@@ -12,6 +12,12 @@ class EnvironmentConfig(object):
     
     data_file_names = ['digitaltwin_data_300waypoints_1ep_1',
                     'digitaltwin_data_300waypoints_1ep_1_wind4', 
+                    'digitaltwin_data_620waypoints_1ep_wind5_maxcoord150',
+                    'digitaltwin_data_300waypoints_1ep_1',
+                    'digitaltwin_data_620waypoints_1ep_wind5_maxcoord150',
+                    'digitaltwin_data_300waypoints_1ep_1_wind4', 
+                    'digitaltwin_data_300waypoints_1ep_1',
+                    'digitaltwin_data_300waypoints_1ep_1_wind4', 
                     'digitaltwin_data_620waypoints_1ep_wind5_maxcoord150']
     
     test_data_file_names = ['digitaltwin_data_300waypoints_1ep_1']

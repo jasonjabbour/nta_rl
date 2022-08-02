@@ -187,6 +187,10 @@ Specify the algorithm and policy number at the top of digital_twin.py
         cd nta_rl
         python digital_twin.py --mode test
 
+Run the best policy and set environment to verbose
+
+        python digital_twin.py --mode test --best_model --verbose_env
+
 
 ## General Troubleshooting
 

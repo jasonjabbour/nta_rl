@@ -8,11 +8,10 @@ from stable_baselines3.common.vec_env.dummy_vec_env import DummyVecEnv
 from envs.digital_twin_env import DigitalTwinEnv
 
 
-POLICY_NUMBER = 3
+POLICY_NUMBER = 4
 SEED = 7
 ALGORITHM_NAME = 'PPO'
 EVAL_FREQ = 10000
-# DISCOUNT_FACTOR = .1
 
 class DigitalTwin():
     '''Driver Class for Offline RL Training a DigitalTwin Ship'''
@@ -38,7 +37,7 @@ class DigitalTwin():
                                    verbose_env=verbose_env)
         
         # Timesteps based on number of data observations
-        self._total_timesteps = self._env.get_num_rows() - 5000 # Training usually doesn't stop exactly at timesteps specified
+        self._total_timesteps = self._env.get_num_rows() - 10000 # Training usually doesn't stop exactly at timesteps specified
 
         if mode == 'train':
             self.train()
@@ -77,7 +76,7 @@ class DigitalTwin():
         print('>> Model Saved <<')
     
     def test(self):
-        '''Test a Saved Reinforcement LEarning Policy'''
+        '''Test a Saved Reinforcement Learning Policy'''
         model = self.algorithm_class.load(self._model_path, env=self._env)
         
         obs = self._env.reset()
