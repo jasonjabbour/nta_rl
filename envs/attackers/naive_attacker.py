@@ -11,8 +11,6 @@ import numpy as np
 from envs import digital_twin_config
 from envs.attackers import attacker
 
-# At the latest start the attack at the last 20% of the episode
-LATEST_ATTACK_START_TIME = .2
 
 class NaiveAttacker(attacker.Attacker):
     '''A naive attacker that perturbs observations until it is detected.'''
@@ -29,8 +27,7 @@ class NaiveAttacker(attacker.Attacker):
             cooldown: number of timesteps to wait before launching another attack
             verbose: output logs about what the attack is doing to console 
         '''
-        
-
+    
         # Read in configuration parameters
         self._env_config = digital_twin_config.EnvironmentConfig()
 
@@ -45,12 +42,16 @@ class NaiveAttacker(attacker.Attacker):
         
         # State of attack
         self._attack_in_progress = False 
+        self._attack_scheduled = False
         
         # Keep track of current step within episode
         self._episode_timestep_counter = 0 
         
         # Timestep to attack
         self._planned_time_2_attack = -1 
+        
+        # Start off with no indices under attack
+        self._indices_under_attack = []
         
         # Pass arguments to super class
         super(NaiveAttacker, self).__init__(
@@ -64,21 +65,30 @@ class NaiveAttacker(attacker.Attacker):
         '''Plans the timestep when the attack should start'''
         
         # Plan the timestep to launch an attack
-        if not self._attack_in_progress:
-            # Must select a timestep at least x% before episode ends
-            self._planned_time_2_attack = random.randint(0, self._steps_per_episode - int(LATEST_ATTACK_START_TIME*self._steps_per_episode)) 
-        
+        if not self._attack_scheduled:
+            self._planned_time_2_attack = random.randint(self._episode_timestep_counter, self._steps_per_episode)
+            # Now the attack time has been scheduled
+            self._attack_scheduled = True
+            
     def get_attack_in_progress(self):
         '''Return whether or not an attack is in progress'''
         return self._attack_in_progress
+
+    def get_attack_scheduled(self):
+        '''Return whether or not an attack has been scheduled'''
+        return self._attack_scheduled
         
     def permission_to_start_attack(self) -> bool:
         '''Compare the attack start timestep time with the current timestep. 
             If attack is not planned self._planned_time_2_attack will have a default
-            value of -1. 
+            value of -1. Gaining permission to start also requires that the attack has
+            been scheduled and the attack is not already in progress. 
         '''
-        if (self._planned_time_2_attack >= self._episode_timestep_counter):
-            return True
+        # Attack must be scheduled and not in progress
+        if self._attack_scheduled and (not self._attack_in_progress):
+            # Scheduled time must be past current time
+            if (self._episode_timestep_counter >= self._planned_time_2_attack):
+                return True
         return False
              
     def on_step(self, obs):
@@ -87,18 +97,18 @@ class NaiveAttacker(attacker.Attacker):
         Args:
             obs: observation at the current timetep
         '''
-        
-        # Increase the counter
-        self._episode_timestep_counter+=1
-        
-        # If the attack has not started check and it's time to launch attack
-        if (not self._attack_in_progress) and self.permission_to_start_attack():
+                
+        # Check whether it's time to laucn
+        if self.permission_to_start_attack():
             # Start the attack
             self.start_attack(obs)
             
         # If attack is in progress modify the observation
         if self._attack_in_progress:
-            return self.process_observation(obs)
+            obs = self.process_observation(obs)
+        
+        # Increase the counter
+        self._episode_timestep_counter+=1
         
         # If attack is not in progress do not modify observation
         return obs
@@ -162,26 +172,29 @@ class NaiveAttacker(attacker.Attacker):
 
     def get_indices_under_attack(self):
         '''Return the indices currently chosen to be atacked'''
-        if self._indices_under_attack:
-            return self._indices_under_attack
-        return list()
+        return self._indices_under_attack
         
     def on_reset(self):
         '''Callback function for the reset event''' 
-        # Reset attack and episode 
-        self._attack_in_progress = False
-        self._episode_timestep_counter = 0  
-        self._planned_time_2_attack = -1 
-        
+        # Reset attack  
+        self.reset_attack()
+    
+        # Reset episode
+        self.reset_episode()
+
         # Plan next attack
         self.attack_driver()
     
 
     def end_attack(self, plan_next_attack=False):
-        ''' End attack '''
+        ''' End attack 
+        
+        Args:
+            plan_next_attack: Boolean value indicating whether
+                or not to schedule another attack
+        '''
         # Reset attack 
-        self._attack_in_progress = False
-        self._planned_time_2_attack = -1 
+        self.reset_attack()
         
         # Plan Next attack
         if plan_next_attack:
@@ -190,6 +203,16 @@ class NaiveAttacker(attacker.Attacker):
         if self._verbose:
             print('Attack ended.')
                   
+    def reset_attack(self):
+        '''Reset all parameters correlated with an attack'''
+        self._attack_scheduled = False
+        self._attack_in_progress = False
+        self._planned_time_2_attack = -1 
+        self._indices_under_attack = []
     
+    def reset_episode(self):
+        '''Reset all parameters correlated with an episode'''
+        self._episode_timestep_counter = 0  
+        
 if __name__ == '__main__':
     attack = NaiveAttacker('NaiveAttacker', verbose=True)

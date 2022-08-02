@@ -19,7 +19,8 @@ class DigitalTwin():
     
     def __init__(self, 
                  mode:str='train', 
-                 best_model=False) -> None:
+                 best_model:bool=False, 
+                 verbose_env:bool=False) -> None:
         '''Constructor for DigitalTwin Class'''
         
         # Tensorboard logging path
@@ -33,7 +34,8 @@ class DigitalTwin():
         self._model_directory = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER))
         
         #Initialize Open AI Gym environment. A
-        self._env = DigitalTwinEnv(mode=mode)
+        self._env = DigitalTwinEnv(mode=mode, 
+                                   verbose_env=verbose_env)
         
         # Timesteps based on number of data observations
         self._total_timesteps = self._env.get_num_rows() - 5000 # Training usually doesn't stop exactly at timesteps specified
@@ -117,9 +119,11 @@ if __name__ == '__main__':
     # Input commands
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--mode', dest='mode', type=str, default='train')
+    arg_parser.add_argument('--verbose_env', dest='verbose_env', action='store_true', default=False)
     arg_parser.add_argument('--best_model', dest='best_model', action='store_true', default=False)
     args = arg_parser.parse_args()
     
         
     run = DigitalTwin(mode=args.mode, 
-                      best_model=args.best_model)
+                      best_model=args.best_model, 
+                      verbose_env=args.verbose_env)

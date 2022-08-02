@@ -24,3 +24,13 @@ class EnvironmentConfig(object):
                 'waypoint_x', 'waypoint_y', 'reached_waypoint','waypoint_counter']
 
     steps_per_episode = 100
+    
+    attack_detected_bonus = 10
+    
+    attack_TP_threshold = .8
+    
+    attack_FN_threshold = .5
+
+    attack_FP_threshold = .5
+    
+    attack_TN_threshold = .2

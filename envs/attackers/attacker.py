@@ -15,7 +15,6 @@ class Attacker(object):
         '''
         
         self._name = name
-        self._attack_in_progress = False
     
     def get_name(self) -> str:
         '''Name of the attacker'''
@@ -23,16 +22,8 @@ class Attacker(object):
 
     def get_attack_in_progress(self) -> bool:
         '''Whether or not an attack is in progress'''
-        return self._attack_in_progress
-    
-    def set_attack_in_progress(self, status):
-        '''Sets the status of the attack
-        
-        Args:
-            status: bool value whether or not an attack is in progress
-        '''
-        self._attack_in_progress = status
-        
+        pass
+            
     def end_attack(self):
         ''' End attack by no longer changing observations.'''
         pass
