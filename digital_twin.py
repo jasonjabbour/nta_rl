@@ -1,10 +1,12 @@
 import os
-import argparse
 import gym
+import argparse
 from stable_baselines3 import DDPG, PPO
 from stable_baselines3.common.callbacks import EvalCallback
+from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.vec_env.dummy_vec_env import DummyVecEnv
+from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv 
+from stable_baselines3.common.env_util import make_vec_env
 from envs.digital_twin_env import DigitalTwinEnv
 
 
@@ -12,6 +14,9 @@ POLICY_NUMBER = 4
 SEED = 7
 ALGORITHM_NAME = 'PPO'
 EVAL_FREQ = 10000
+
+# Number of parallel processes to use
+num_cpu = 4
 
 class DigitalTwin():
     '''Driver Class for Offline RL Training a DigitalTwin Ship'''
@@ -22,21 +27,19 @@ class DigitalTwin():
                  verbose_env:bool=False) -> None:
         '''Constructor for DigitalTwin Class'''
         
-        # Tensorboard logging path
-        self._log_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'Logs')
-        # Model Path
-        self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), ALGORITHM_NAME + '_policy_'+str(POLICY_NUMBER))
-        # Load Best Model
-        if best_model:
-            self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'best_model')
-        # Model Directory
-        self._model_directory = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER))
+        # Save parameters as class variables
+        self._mode = mode
+        self._best_model = best_model
+        self._verbose_env = verbose_env
+        
+        # Built Directory Paths
+        self.build_paths()
         
         #Initialize Open AI Gym environment. A
         self._env = DigitalTwinEnv(mode=mode, 
-                                   verbose_env=verbose_env)
+                                 verbose_env=verbose_env)
         
-        # Timesteps based on number of data observations
+        # Set timesteps based on number of data observations
         self._total_timesteps = self._env.get_num_rows() - 10000 # Training usually doesn't stop exactly at timesteps specified
 
         if mode == 'train':
@@ -44,13 +47,30 @@ class DigitalTwin():
         
         if mode == 'test':
             self.test()
+            
+    def build_paths(self):
+        '''Create directory paths for saving and loading models'''
+        # Tensorboard logging path
+        self._log_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'Logs')
+        # Model Path
+        self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), ALGORITHM_NAME + '_policy_'+str(POLICY_NUMBER))
+        # Load Best Model
+        if self._best_model:
+            self._model_path = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER), 'best_model')
+        # Model Directory
+        self._model_directory = os.path.join('policies', 'all_policy_'+str(POLICY_NUMBER))
 
     def train(self):
         '''Train Reinforcement Learning Policy'''
         
-        # Add Wrappers for efficiency and callback function
-        # self._env = Monitor(self._env, self._model_directory)
-        # self._env = DummyVecEnv([lambda: self._env])
+        # Create Argument Dictionary
+        env_kwargs = dict(mode=self._mode, verbose_env=self._verbose_env)
+        
+        # Vectorize Environment for Multiprocessing (DummyVecEnv faster than SubprocVecEnv)
+        self._env = make_vec_env(DigitalTwinEnv, 
+                                 env_kwargs=env_kwargs, 
+                                 n_envs=num_cpu, 
+                                 vec_env_cls=SubprocVecEnv)
         
         #Initialize Model
         model = self.algorithm_class('MlpPolicy',
@@ -103,6 +123,26 @@ class DigitalTwin():
             if not another_observation.lower() == 'y':
                 break
     
+    def make_env(self, 
+                 rank: int,
+                 seed: int=0):
+        '''
+            Utility function for multiprocessed env
+            
+        Args:
+            seed: (int) initial seed for RNG
+            rank: (int) index of subprocess
+        Returns:
+            (Callable)
+        '''
+        def _init() -> gym.Env:
+            env = DigitalTwinEnv(mode=self._mode, 
+                                 verbose_env=self._verbose_env)
+            env.seed(seed + rank)
+            return env
+        set_random_seed(seed)
+        return _init
+    
     @property
     def algorithm_class(self):
         '''Return the Stable-Baseliens3 Algorithm Class'''
@@ -126,3 +166,11 @@ if __name__ == '__main__':
     run = DigitalTwin(mode=args.mode, 
                       best_model=args.best_model, 
                       verbose_env=args.verbose_env)
+
+#  --- Additional code ---
+# Add Wrappers for efficiency and callback function
+# self._env = Monitor(self._env, self._model_directory)
+# self._env = DummyVecEnv([lambda: self._env])
+
+# Create Environments for Multiprocessing
+# self._env = SubprocVecEnv([self.make_env(i) for i in range(num_cpu)])

@@ -191,6 +191,11 @@ Run the best policy and set environment to verbose
 
         python digital_twin.py --mode test --best_model --verbose_env
 
+View learning curve (set policy number)
+
+        cd nta_rl/policies/all_policy_[policy number]/Logs
+        tensorboard --logdir=./ 
+
 
 ## General Troubleshooting
 
@@ -212,4 +217,6 @@ usv_sim_lsa paper: https://www.mdpi.com/1424-8220/19/5/1068
 usv_sim_lsa repository: https://github.com/disaster-robotics-proalertas/usv_sim_lsa
 
 UWSim: https://github.com/uji-ros-pkg/underwater_simulation
+
+Multiprocessing: https://colab.research.google.com/github/Stable-Baselines-Team/rl-colab-notebooks/blob/sb3/multiprocessing_rl.ipynb
 
