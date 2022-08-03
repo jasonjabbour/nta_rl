@@ -208,7 +208,7 @@ View learning curve (set policy number)
 
 Locally host a Flask dashboard to visualize the functionality of a policy. 
 
-        cd dashboard
+        cd nta_rl
         python dashboard/dashboard.py
 
 #### Dashboard
