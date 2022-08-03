@@ -203,6 +203,9 @@ View learning curve (set policy number)
         cd nta_rl/policies/all_policy_[policy number]/Logs/PPO_1
         tensorboard --logdir=./ 
 
+#### Policy 4 Learning Curve
+![](captures/policy4_learning_curve.PNG)
+
 
 ## Dashboard Visualization
 
