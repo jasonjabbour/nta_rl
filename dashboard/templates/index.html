@@ -66,21 +66,9 @@
             </div>
             <div class="network-traffic-data data">
                 <ul class="horizontal-list">
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
+                    {% for datum in network_traffic %}
+                    <li> <p>{{datum}}</p> </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="rl-agent-confidence-title">
@@ -88,25 +76,41 @@
             </div>
             <div class="rl-actions data">
                 <ul class="horizontal-list">
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
-                    <li> <p>Home</p> </li>
+                    {% for conf in rl_confidence %}
+                    <li> <p>{{conf}}</p> </li>
+                    {% endfor %}
                 </ul>
             </div>
-
     </div>
+
+    <div class="attack-container">
+        <div class="Network-State-Title">
+            <h4> True Network State </h4>
+        </div>
+        {% if true_network_state == 1 %}
+            <div class="Network-State-Attack">
+                <h4> Network Under Attack </h4> 
+            </div>
+        {% else %}
+            <div class="Network-State-Benign">
+                <h4> Benign Traffic </h4>
+            </div>
+        {% endif %}
+        
+        <div class="RL-Agent-Alert-Title">
+            <h4> RL Agent Alerts </h4>
+        </div>
+        {% if rl_alert == 1 %}
+            <div class="RL-Agent-Alert">
+                <h4> Alert! Under Attack! </h4> 
+            </div>
+        {% else %}
+            <div class="RL-Agent-Benign">
+                <h4> Benign Traffic </h4>
+            </div>
+        {% endif %}
+    </div>
+
 
 
   <!-- CDN for JS bootstrap -->

@@ -83,3 +83,85 @@ ul.horizontal-list li:not(:last-child){
 .horizontal-list  p {
     padding-top: 30%;
 }
+
+
+.attack-container {
+    display: grid;
+    grid-template-columns: .2fr 2fr .5fr 2fr .2fr;
+    grid-template-rows: 1fr 1fr 3fr 1fr .5fr;
+    height: 40vh;
+}
+
+
+.attack-container .Network-State-Title {
+    /* start row / start col / end row / end col*/
+    grid-area: 2 / 2 / 3 / 3;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.attack-container .RL-Agent-Alert-Title {
+    /* start row / start col / end row / end col*/
+    grid-area: 2 / 4 / 3 / 5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attack-container .Network-State-Attack {
+    /* start row / start col / end row / end col*/
+    grid-area: 3 / 2 / 4 / 3;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #292b2c;
+    color: white;
+    border-radius: 1em;
+
+}
+
+.attack-container .Network-State-Benign {
+    /* start row / start col / end row / end col*/
+    grid-area: 3 / 2 / 4 / 3;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    color: black;
+    border-radius: 1em;
+
+}
+
+.attack-container .RL-Agent-Alert {
+    /* start row / start col / end row / end col*/
+    grid-area: 3 / 4 / 4 / 5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightcoral;
+    color: black;
+    border-radius: 1em;
+
+}
+
+.attack-container .RL-Agent-Benign {
+    /* start row / start col / end row / end col*/
+    grid-area: 3 / 4 / 4 / 5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    color: black;
+    border-radius: 1em;
+
+}
+
+
