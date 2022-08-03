@@ -172,6 +172,7 @@ Install Dependencies
         pip install stable-baselines3[extra]
         pip install tensorboard
         pip install attrs
+        pip install flask
         
 ### Train an RL Policy
 
@@ -193,8 +194,16 @@ Run the best policy and set environment to verbose
 
 View learning curve (set policy number)
 
-        cd nta_rl/policies/all_policy_[policy number]/Logs
+        cd nta_rl/policies/all_policy_[policy number]/Logs/PPO_1
         tensorboard --logdir=./ 
+
+
+## Dashboard Visualization
+
+Locally host a Flask dashboard to visualize the functionality of a policy. 
+
+        cd dashboard
+        python dashboard.py
 
 
 ## General Troubleshooting

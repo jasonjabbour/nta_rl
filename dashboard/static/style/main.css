@@ -1,0 +1,85 @@
+/* Dashboard Main Page */
+.data-display-container {
+    display: grid;
+    grid-template-columns: .2fr 1.5fr .1fr 6fr .2fr;
+    grid-template-rows: .5fr 1fr 1fr 1fr .5fr;
+    height: 30vh;
+}
+
+.data-display-container .feature-names {
+    /* start row / start col / end row / end col*/
+    grid-area: 1 / 4 / 2 / 5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0%;
+}
+
+.data-display-container .network-traffic-title {
+    /* start row / start col / end row / end col*/
+    grid-area: 2 / 2 / 3 / 3;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.data-display-container .rl-agent-confidence-title {
+    /* start row / start col / end row / end col*/
+    grid-area: 4 / 2 / 5 / 3;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.data-display-container .network-traffic-data {
+    /* start row / start col / end row / end col*/
+    grid-area: 2 / 4 / 3 / 5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0275d8;
+    border-radius: 1em;
+    color: white;
+}
+
+.data-display-container .rl-actions {
+    /* start row / start col / end row / end col*/
+    grid-area: 4 / 4 / 5 / 5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0275d8;
+    border-radius: 1em;
+    color: white;
+}
+
+
+/* Making a horizontal list */
+/* Remove bullets */
+ul.horizontal-list {
+    list-style: none;
+    margin: 0 0 0 0;
+}
+/* List Horizontally and add padding*/
+ul.horizontal-list li {
+    display: inline-block;
+    min-width: 5rem;
+    text-align: center;
+    font-size: large;
+}
+
+/* Add vertical line */
+ul.horizontal-list li:not(:last-child){
+    border-right: 2px solid white;
+    height: 4em;
+
+}
+
+.horizontal-list  p {
+    padding-top: 30%;
+}
