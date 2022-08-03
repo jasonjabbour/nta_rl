@@ -20,7 +20,7 @@ class EnvironmentConfig(object):
                     'digitaltwin_data_300waypoints_1ep_1_wind4', 
                     'digitaltwin_data_620waypoints_1ep_wind5_maxcoord150']
     
-    test_data_file_names = ['digitaltwin_data_300waypoints_1ep_1']
+    test_data_file_names = ['digitaltwin_data_620waypoints_1ep_wind5_maxcoord150']
     
     features = ['position_x','position_y','position_z',
                 'orientation_x', 'orientation_y', 'orientation_z',

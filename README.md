@@ -183,7 +183,8 @@ Specify the algorithm and policy number at the top of digital_twin.py
 
 ### Test an RL Policy 
 
-Specify the algorithm and policy number at the top of digital_twin.py
+Test an RL policy with an attacker influence.
+(Specify the algorithm and policy number at the top of digital_twin.py)
 
         cd nta_rl
         python digital_twin.py --mode test
@@ -191,6 +192,11 @@ Specify the algorithm and policy number at the top of digital_twin.py
 Run the best policy and set environment to verbose
 
         python digital_twin.py --mode test --best_model --verbose_env
+
+Test an RL policy by manually attacking observations yourself
+
+        cd nta_rl
+        python digital_twin.py --mode manual_test --best_model
 
 View learning curve (set policy number)
 
@@ -203,7 +209,10 @@ View learning curve (set policy number)
 Locally host a Flask dashboard to visualize the functionality of a policy. 
 
         cd dashboard
-        python dashboard.py
+        python dashboard/dashboard.py
+
+#### Dashboard
+![](captures/Dashboard%20Alert.PNG)
 
 
 ## General Troubleshooting

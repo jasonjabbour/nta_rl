@@ -1475,5 +1475,12 @@ KeyboardInterrupt
 (nta-rl-env) C:\Users\User\Desktop\nta_rl>
 
 
+---------------------------------
+
+----------
+
+----------------------------------
+
+Policy 4, PPO 1,000,000 timesteps, 10hrs training
 
 

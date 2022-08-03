@@ -182,7 +182,8 @@ class DigitalTwinEnv(gym.Env):
 
         # Send observation to attacker module
         self._processed_obs = obs
-        if not self._mode == 'test': 
+        # Do not envolve the attacker if manually testing policy
+        if not self._mode == 'manual_test': 
             self._processed_obs = self._attacker.on_step(obs)
             
         # Add the real previous observations history to this processed observation
@@ -229,7 +230,7 @@ class DigitalTwinEnv(gym.Env):
         '''Read in all data as one pandas dataframe'''
         
         data_files = self._data_file_names
-        if mode == 'test':
+        if (mode == 'test') or (mode == 'manual_test'):
             data_files = self._test_data_file_names
             
         dataframe_lst = []
@@ -299,16 +300,36 @@ class DigitalTwinEnv(gym.Env):
     def close(self):
         pass
     
-    def display(self, features):
-        #Assume observation in feature is in order!
+    def display_observation(self, features):
+        '''Display observation names and observation values in 
+            the most resent history buffer position. 
+        
+        Attention:
+            Observation names and observation values must be in the same order!
+        '''
         features_num = self.get_num_observation_features()
         count = 0
         for feature in zip(features):
-            if count >= features_num:
+            if (count + 2) >= features_num:
                 break
             print('['+str(count)+'] \t' + self._features[count] + ': ' + str(round(feature[0],2)))
             count+=1
                     
+    def display_action(self, features):
+        '''Display observation names and observation confidence values. 
+        
+        Attention:
+            Observation names and actions confidence levels must be in the same order!
+        '''
+        features_num = self.get_num_action_features()
+        count = 0
+        for feature in zip(features):
+            if (count + 1) > features_num:
+                break
+            print('['+str(count)+'] \t' + self._features[count] + ': ' + str(round(feature[0],2)))
+            count+=1
+        
+        print('['+str(count)+'] \t' + 'Under Attack' + ': ' + str(round(feature[0],2)))
 
     def get_num_rows(self):
         return self._num_rows
@@ -316,6 +337,17 @@ class DigitalTwinEnv(gym.Env):
     def get_num_cols(self):
         return self._num_cols
     
+    def get_under_attack(self):
+        return self._attacker.get_attack_in_progress()
+    
+    def get_attack_scheduled(self):
+        return self._attacker.get_attack_scheduled()
+    
+    def get_planned_time_2_attack(self):
+        return self._attacker.get_planned_time_2_attack()
+    
+    def get_indices_under_attack(self):
+        return self._attacker.get_indices_under_attack()
 
 
 

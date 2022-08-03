@@ -77,6 +77,10 @@ class NaiveAttacker(attacker.Attacker):
     def get_attack_scheduled(self):
         '''Return whether or not an attack has been scheduled'''
         return self._attack_scheduled
+
+    def get_planned_time_2_attack(self):
+        '''Return the timestep attack will be launched'''
+        return self._planned_time_2_attack
         
     def permission_to_start_attack(self) -> bool:
         '''Compare the attack start timestep time with the current timestep. 
