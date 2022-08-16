@@ -11,7 +11,7 @@ from stable_baselines3.common.env_util import make_vec_env
 from envs.digital_twin_env import DigitalTwinEnv
 
 
-POLICY_NUMBER = 4
+POLICY_NUMBER = 5
 SEED = 7
 ALGORITHM_NAME = 'PPO'
 EVAL_FREQ = 10000
